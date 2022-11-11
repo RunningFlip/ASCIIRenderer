@@ -67,8 +67,10 @@ namespace ASCIIRenderer {
 
         private void RewriteBackground() {
 
-            Console.Clear();
-            
+            if (this.consoleHeight > 0) {
+                Console.Clear();
+            }
+
             for (int i = 0; i < this.consoleHeight; i++) {
                 Console.WriteLine(this.emptyLine);
             }
@@ -122,7 +124,7 @@ namespace ASCIIRenderer {
 
             int size = newText.Length;
 
-            if (0 < lineNumber && lineNumber < this.consoleHeight && 0 < xPosition + size && xPosition < this.consoleWidth) {
+            if (0 < lineNumber && lineNumber <= this.consoleHeight && 0 < xPosition + size && xPosition < this.consoleWidth) {
 
                 if (xPosition < 0) {
 
@@ -137,7 +139,7 @@ namespace ASCIIRenderer {
                 }
 
                 Console.CursorVisible = false;
-                Console.SetCursorPosition(0, lineNumber);
+                Console.SetCursorPosition(0, lineNumber - 1);
 
                 string s = this.emptyLine;
 
