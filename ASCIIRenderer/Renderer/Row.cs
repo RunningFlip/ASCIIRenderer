@@ -30,8 +30,6 @@ namespace ASCIIRenderer {
         private int maxLength;
         private char[] content;
 
-        private bool cleaned;
-
         //--------------------------------------------------------------------------------
         // Constructor
         //--------------------------------------------------------------------------------
