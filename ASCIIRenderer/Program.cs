@@ -38,11 +38,8 @@ namespace ASCIIRenderer {
                 float angle = 0.01f;
 
                 Drawable drawable = drawables[i];
-
-                drawable.posX += 1;
-
-                drawable.scaleX = 8;
-                drawable.scaleY = 4;
+                drawable.scaleX = 12;
+                drawable.scaleY = 6;
 
                 drawable.Rotate(ref rotationAxis, angle);
             }

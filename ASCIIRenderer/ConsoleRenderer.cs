@@ -133,18 +133,29 @@ namespace ASCIIRenderer {
                 if (xPosition + size >= this.consoleWidth) {
 
                     int charactersToCut = xPosition + size - this.consoleWidth;
-                    newText = newText.Substring(0, newText.Length - charactersToCut / 2);
+                    newText = newText.Substring(0, size - charactersToCut);
                 }
 
                 Console.CursorVisible = false;
                 Console.SetCursorPosition(0, lineNumber);
 
                 string s = this.emptyLine;
-                string pre = s.Substring(0, xPosition);
-                string suf = s.Substring(xPosition, this.emptyLine.Length - xPosition - newText.Length);
-                string tmp = pre + newText + suf;
 
-                Console.Write(tmp);
+                string prefix = 0 < xPosition
+                    ? s.Substring(0, xPosition)
+                    : "";
+
+                string suffix = xPosition + size < this.consoleWidth
+                    ? s.Substring(xPosition + size, this.consoleWidth - xPosition - size - 1)
+                    : "";
+
+                string line = prefix + newText + suffix;
+
+                if (line.Length > this.consoleWidth) {
+                    throw new Exception("Wrong line length: " + line.Length);
+                }
+
+                Console.Write(line);
                 Console.SetCursorPosition(0, this.consoleHeight - 3);
             }
         }
