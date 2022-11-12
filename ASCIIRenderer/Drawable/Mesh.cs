@@ -11,13 +11,26 @@ namespace ASCIIRenderer {
         // Fields
         //--------------------------------------------------------------------------------
 
-        private readonly char[] shadingSymbols = { '.', ',', '-', '~', ':', ';', '=', '!', '*', '#', '$', '@' };
+        private static readonly char[] shadingSymbols = { '.', ',', '-', '~', ':', ';', '=', '!', '*', '#', '$', '@' };
   
         public readonly Vector3[] vertices;
         public readonly int[] triangles;
 
         //--------------------------------------------------------------------------------
         // Constructors
+        //--------------------------------------------------------------------------------
+
+        public Mesh(Mesh toCopy) {
+
+            if (toCopy.triangles.Length % 3 != 0) {
+                throw new Exception("Triangles array not dividable by three.");
+            }
+
+            this.vertices = (Vector3[])toCopy.vertices.Clone();
+            this.triangles = (int[])toCopy.triangles.Clone();
+        }
+
+
         //--------------------------------------------------------------------------------
 
         public Mesh(Vector3[] vertices, int[] triangles) {
@@ -53,22 +66,24 @@ namespace ASCIIRenderer {
                 Vector3 vec3 = this.vertices[this.triangles[i + 2]];
 
                 if (this.IsNormalVisible(ref viewDirection, ref vec1, ref vec2, ref vec3)) {
-                    
+
+                    Vector3 v1 = new Vector3(vec1.X * scaleX, vec1.Y * scaleY, 0f);
+                    Vector3 v2 = new Vector3(vec2.X * scaleX, vec2.Y * scaleY, 0f);
+                    Vector3 v3 = new Vector3(vec3.X * scaleX, vec3.Y * scaleY, 0f);
+
                     for (int y = 0; y < sizeY; y++) {
 
-                        Vector3 v1 = new Vector3(vec1.X * scaleX, vec1.Y * scaleY, 0f);
-                        Vector3 v2 = new Vector3(vec2.X * scaleX, vec2.Y * scaleY, 0f);
-                        Vector3 v3 = new Vector3(vec3.X * scaleX, vec3.Y * scaleY, 0f);
+                        Vector3 point = new Vector3(0f, y - sizeY / 2f, 0f);
 
                         for (int x = 0; x < sizeX; x++) {
 
-                            if(this.PointInTriangle(new Vector3(x - sizeX / 2f, y - sizeY / 2f, 0f), ref v1, ref v2, ref v3)) {
+                            point.X = x - sizeX / 2f;
+
+                            if (this.PointInTriangle(ref point, ref v1, ref v2, ref v3)) {
 
                                 Vector3 normal = this.GetNormal(ref vec1, ref vec2, ref vec3);
                                 float shading = Vector3.Dot(normal, viewDirection);
-                                char c = this.shadingSymbols[(int)((this.shadingSymbols.Length - 1) * shading)];
-
-                                pixels[y][x] = c;
+                                pixels[y][x] = Mesh.shadingSymbols[(int)((Mesh.shadingSymbols.Length - 1) * shading)];
                             }
                         }
                     }
@@ -94,7 +109,7 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        private bool PointInTriangle(Vector3 point, ref Vector3 v1, ref Vector3 v2, ref Vector3 v3) {
+        private bool PointInTriangle(ref Vector3 point, ref Vector3 v1, ref Vector3 v2, ref Vector3 v3) {
 
             float d1 = this.Sign(ref point, ref v1, ref v2);
             float d2 = this.Sign(ref point, ref v2, ref v3);
