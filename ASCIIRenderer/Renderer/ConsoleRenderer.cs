@@ -12,7 +12,7 @@ namespace ASCIIRenderer {
         // Properties
         //--------------------------------------------------------------------------------
 
-        public virtual int ThreadSleepDuration => 0;
+        public virtual int ThreadSleepMS => 0;
 
         public int ConsoleWidth => this.consoleWidth;
         public int ConsoleHeight => this.consoleHeight;
@@ -68,7 +68,7 @@ namespace ASCIIRenderer {
 
                 Row row = this.rows[i];
 
-                if (row.Changed) {
+                if (row.HasNewContent) {
 
                     Console.CursorVisible = false;
                     Console.SetCursorPosition(0, i);
@@ -101,8 +101,8 @@ namespace ASCIIRenderer {
             int sizeX = pixels[0].Length;
             int sizeY = pixels.Length;
 
-            int posX = drawables.posX - sizeX / 2;
-            int posY = drawables.posY - sizeY / 2;
+            int posX = drawables.PosX - sizeX / 2;
+            int posY = drawables.PosY - sizeY / 2;
 
             for (int i = 0; i < pixels.Length; i++) {
 
@@ -113,9 +113,7 @@ namespace ASCIIRenderer {
                     content += row[idx];
                 }
 
-                //this.RewriteLine(posY + i, posX, newLine);
-
-                int size = content.Length;
+                int contentLength = content.Length;
 
                 if (posX < 0) {
 
@@ -123,11 +121,11 @@ namespace ASCIIRenderer {
                     posX = 0;
                 }
 
-                if (posX + size >= this.consoleWidth) {
+                if (posX + contentLength >= this.consoleWidth) {
 
-                    int charactersToCut = posX + size - this.consoleWidth;
+                    int charactersToCut = posX + contentLength - this.consoleWidth;
 
-                    int length = size - charactersToCut;
+                    int length = contentLength - charactersToCut;
                     content = length > 0
                         ? content.Substring(0, length)
                         : "";
@@ -143,37 +141,24 @@ namespace ASCIIRenderer {
 
         private void GetConsoleSize() {
 
-            int x = Console.WindowWidth;
-            int y = Console.WindowHeight;
+            int width = Console.WindowWidth;
+            int height = Console.WindowHeight;
 
             bool changed = false;
 
-            if (this.consoleWidth != x) {
+            if (this.consoleWidth != width) {
 
                 changed = true;
-                this.consoleWidth = x;
-                this.emptyLine = new string(EMPTY_CHAR, this.ConsoleWidth - 1);
+                this.consoleWidth = width;
+                this.emptyLine = new string(ConsoleRenderer.EMPTY_CHAR, this.ConsoleWidth - 1);
+                this.UpdateRowLengths(this.consoleWidth);
             }
 
-            if (this.consoleHeight != y) {
+            if (this.consoleHeight != height) {
 
                 changed = true;
-
-                if (this.consoleHeight < y) {
-                
-                    for (int i = 0; i < y - this.consoleHeight; i++) {
-                        this.rows.Add(new Row(EMPTY_CHAR));
-                    }
-                }
-                else {
-                    this.rows.RemoveRange(y, Math.Abs(y - this.consoleHeight));
-                }
-
-                for (int i = 0; i < this.rows.Count; i++) {
-                    this.rows[i].SetMaxLength(this.consoleWidth);
-                }
-
-                this.consoleHeight = y;
+                this.UpdateRowCount(this.consoleHeight, height);
+                this.consoleHeight = height;
             }
 
             if (changed) {
@@ -183,47 +168,27 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        //public void RewriteLine(int lineNumber, int xPosition, string newText) {
-        //
-        //    int size = newText.Length;
-        //
-        //    if (0 < lineNumber && lineNumber <= this.consoleHeight && 0 < xPosition + size && xPosition < this.consoleWidth) {
-        //
-        //        if (xPosition < 0) {
-        //
-        //            newText = newText.Substring(Math.Abs(xPosition));
-        //            xPosition = 0;
-        //        }
-        //
-        //        if (xPosition + size >= this.consoleWidth) {
-        //
-        //            int charactersToCut = xPosition + size - this.consoleWidth;
-        //            newText = newText.Substring(0, size - charactersToCut);
-        //        }
-        //
-        //        Console.CursorVisible = false;
-        //        Console.SetCursorPosition(0, lineNumber - 1);
-        //
-        //        string s = this.emptyLine;
-        //
-        //        string prefix = 0 < xPosition
-        //            ? s.Substring(0, xPosition)
-        //            : "";
-        //
-        //        string suffix = xPosition + size < this.consoleWidth
-        //            ? s.Substring(xPosition + size, this.consoleWidth - xPosition - size - 1)
-        //            : "";
-        //
-        //        string line = prefix + newText + suffix;
-        //
-        //        if (line.Length > this.consoleWidth) {
-        //            throw new Exception("Wrong line length: " + line.Length);
-        //        }
-        //
-        //        Console.Write(line);
-        //        Console.SetCursorPosition(0, this.consoleHeight - 3);
-        //    }
-        //}
+        private void UpdateRowCount(int currentRowCount, int newRowCount) {
+
+            if (currentRowCount < newRowCount) {
+
+                for (int i = 0; i < newRowCount - currentRowCount; i++) {
+                    this.rows.Add(new Row(this.consoleWidth, ConsoleRenderer.EMPTY_CHAR));
+                }
+            }
+            else {
+                this.rows.RemoveRange(newRowCount, Math.Abs(newRowCount - currentRowCount));
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+
+        private void UpdateRowLengths(int length) {
+
+            for (int i = 0; i < this.rows.Count; i++) {
+                this.rows[i].SetMaxLength(length);
+            }
+        }
 
         //--------------------------------------------------------------------------------
     }

@@ -14,12 +14,12 @@ namespace ASCIIRenderer {
 
             get {
 
-                this.Changed = false;
+                this.HasNewContent = false;
                 return new string(this.content);
             }
         }
 
-        public bool Changed { get; private set; }
+        public bool HasNewContent { get; private set; }
 
         //--------------------------------------------------------------------------------
         // Fields
@@ -34,8 +34,10 @@ namespace ASCIIRenderer {
         // Constructor
         //--------------------------------------------------------------------------------
 
-        public Row(char emptyChar) {
+        public Row(int length, char emptyChar) {
+
             this.emptyChar = emptyChar;
+            this.SetMaxLength(length);
         }
 
         //--------------------------------------------------------------------------------
@@ -61,6 +63,15 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
+        public void Clear() {
+
+            for (int i = 0; i < this.content.Length; i++) {
+                this.content[i] = this.emptyChar;
+            }
+        }
+
+        //--------------------------------------------------------------------------------
+
         public void SetContent(int position, string text) {
 
             if (string.IsNullOrEmpty(text)) {
@@ -71,11 +82,8 @@ namespace ASCIIRenderer {
                 throw new Exception("Text is too long to match the content size!");
             }
 
-            if (!this.Changed) {
-
-                for (int i = 0; i < this.content.Length; i++) {
-                    this.content[i] = this.emptyChar;
-                }
+            if (!this.HasNewContent) {
+                this.Clear();
             }
 
             for (int i = 0; i < text.Length; i++) {
@@ -87,7 +95,7 @@ namespace ASCIIRenderer {
                 }
             }
 
-            this.Changed = true;
+            this.HasNewContent = true;
         }
 
         //--------------------------------------------------------------------------------
