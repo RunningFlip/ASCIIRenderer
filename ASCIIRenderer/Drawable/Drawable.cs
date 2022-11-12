@@ -10,13 +10,19 @@ namespace ASCIIRenderer {
         // Properties
         //--------------------------------------------------------------------------------
 
+        // Bounds
         public Vector3 BoundingBoxMin => this.boundingMin;
         public Vector3 BoundingBoxMax => this.boundingMax;
         public Vector3 BoundsSize => Vector3.Abs(this.boundingMax - this.boundingMin);
 
+        // Rotation
+        private Quaternion Rotation => this.rotation;
+
+        // Position
         public int PosX => this.posX;
         public int PosY => this.posY;
 
+        // Scale
         public int ScaleX => this.scaleX;
         public int ScaleY => this.scaleY;
 
@@ -26,17 +32,22 @@ namespace ASCIIRenderer {
         // Fields
         //--------------------------------------------------------------------------------
 
+        // Bounds
         private readonly Vector3 boundsMinDefault = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private readonly Vector3 boundsMaxDefault = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-
         private Vector3 boundingMin;
         private Vector3 boundingMax;
 
-        public int posX;
-        public int posY;
+        // Rotation
+        private Quaternion rotation;
 
-        public int scaleX;
-        public int scaleY;
+        // Position
+        private int posX;
+        private int posY;
+
+        // Scale
+        private int scaleX;
+        private int scaleY;
 
         private Mesh mesh;
 
@@ -44,9 +55,31 @@ namespace ASCIIRenderer {
         // Constructor
         //--------------------------------------------------------------------------------
 
+        public Drawable(Drawable toCopy) {
+            this.Init(toCopy.mesh, toCopy.rotation, toCopy.posX, toCopy.posY, toCopy.scaleX, toCopy.scaleY);
+        }
+
+        //--------------------------------------------------------------------------------
+
         public Drawable(Mesh mesh, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) {
+            this.Init(mesh, Quaternion.Identity, posX, posY, scaleX, scaleY);
+        }
+
+        //--------------------------------------------------------------------------------
+
+        public Drawable(Mesh mesh, Quaternion rotation, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) {
+            this.Init(mesh, rotation, posX, posY, scaleX, scaleY);
+        }
+
+        //--------------------------------------------------------------------------------
+        // Methods
+        //--------------------------------------------------------------------------------
+
+        private void Init(Mesh mesh, Quaternion rotation, int posX, int posY, int scaleX, int scaleY) {
 
             this.mesh = mesh;
+
+            this.rotation = rotation;
 
             this.posX = posX;
             this.posY = posY;
@@ -71,6 +104,7 @@ namespace ASCIIRenderer {
             this.boundingMax = this.boundsMaxDefault;
 
             Vector3 rotationVec = Vector3.Normalize(rotationAxis);
+            Quaternion newRot = Quaternion.CreateFromAxisAngle(rotationVec, angle);
 
             for (int i = 0; i < this.mesh.triangles.Length - 2; i += 3) {
 
@@ -78,13 +112,13 @@ namespace ASCIIRenderer {
                 int t2 = this.mesh.triangles[i + 1];
                 int t3 = this.mesh.triangles[i + 2];
 
-                Quaternion rotation = Quaternion.CreateFromAxisAngle(rotationVec, angle);
+                Vector3 vec1 = this.mesh.vertices[t1] = Vector3.Transform(this.mesh.vertices[t1], newRot);
+                Vector3 vec2 = this.mesh.vertices[t2] = Vector3.Transform(this.mesh.vertices[t2], newRot);
+                Vector3 vec3 = this.mesh.vertices[t3] = Vector3.Transform(this.mesh.vertices[t3], newRot);
 
-                Vector3 x = this.mesh.vertices[t1] = Vector3.Transform(this.mesh.vertices[t1], rotation);
-                Vector3 y = this.mesh.vertices[t2] = Vector3.Transform(this.mesh.vertices[t2], rotation);
-                Vector3 z = this.mesh.vertices[t3] = Vector3.Transform(this.mesh.vertices[t3], rotation);
-
-                this.UpdateBounds(ref x, ref y, ref z);
+                this.UpdateBoundsByVertex(ref vec1);
+                this.UpdateBoundsByVertex(ref vec2);
+                this.UpdateBoundsByVertex(ref vec3);
             }
         }
 
@@ -101,17 +135,10 @@ namespace ASCIIRenderer {
                 Vector3 vec2 = this.mesh.vertices[this.mesh.triangles[i + 1]];
                 Vector3 vec3 = this.mesh.vertices[this.mesh.triangles[i + 2]];
 
-                this.UpdateBounds(ref vec1, ref vec2, ref vec3);
+                this.UpdateBoundsByVertex(ref vec1);
+                this.UpdateBoundsByVertex(ref vec2);
+                this.UpdateBoundsByVertex(ref vec3);
             }
-        }
-
-        //--------------------------------------------------------------------------------
-
-        private void UpdateBounds(ref Vector3 vec1, ref Vector3 vec2, ref Vector3 vec3) {
-
-            this.UpdateBoundsByVertex(ref vec1);
-            this.UpdateBoundsByVertex(ref vec2);
-            this.UpdateBoundsByVertex(ref vec3);
         }
 
         //--------------------------------------------------------------------------------
