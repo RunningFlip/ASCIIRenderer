@@ -13,8 +13,6 @@ namespace ASCIIRenderer {
         //--------------------------------------------------------------------------------
 
         public static Vector3[] Torus(int segments, int tubes, float segmentRadius, float tubeRadius, out int[] triangles) {
-            // Total vertices
-            int totalVertices = segments * tubes;
 
             // Init vertexList and indexList
             List<Vector3> verticesList = new List<Vector3>();
@@ -35,11 +33,10 @@ namespace ASCIIRenderer {
 
             // Init temp lists with tubes and segments
             List<List<Vector3>> segmentList = new List<List<Vector3>>();
-            List<Vector3> tubeList;
 
             // Loop through number of tubes
             for (int i = 0; i < numSegments; i++) {
-                tubeList = new List<Vector3>();
+                List<Vector3> tubeList = new List<Vector3>();
 
                 for (int j = 0; j < numTubes; j++) {
 
@@ -80,14 +77,14 @@ namespace ASCIIRenderer {
                     Vector3 v4 = nextTube[j];
 
                     // Draw the first triangle
-                    indicesList.Add((int)verticesList.IndexOf(v1));
-                    indicesList.Add((int)verticesList.IndexOf(v2));
-                    indicesList.Add((int)verticesList.IndexOf(v3));
+                    indicesList.Add(verticesList.IndexOf(v1));
+                    indicesList.Add(verticesList.IndexOf(v2));
+                    indicesList.Add(verticesList.IndexOf(v3));
 
-                    // Finish the quad
-                    indicesList.Add((int)verticesList.IndexOf(v3));
-                    indicesList.Add((int)verticesList.IndexOf(v4));
-                    indicesList.Add((int)verticesList.IndexOf(v1));
+                    // Finish the qu
+                    indicesList.Add(verticesList.IndexOf(v3));
+                    indicesList.Add(verticesList.IndexOf(v4));
+                    indicesList.Add(verticesList.IndexOf(v1));
                 }
             }
 
