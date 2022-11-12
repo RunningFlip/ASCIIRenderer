@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 
@@ -7,6 +8,10 @@ using System.Threading;
 namespace ASCIIRenderer {
 
     public class Program {
+
+
+        private static List<Vector3> directions = new List<Vector3>();
+        private static List<double> rotations = new List<double>();
 
         //--------------------------------------------------------------------------------
         // Methods
@@ -22,12 +27,36 @@ namespace ASCIIRenderer {
             int x = renderer.ConsoleWidth / 8;
             int y = renderer.ConsoleHeight / 6;
 
-            drawables.Add(new Drawable(torusMesh, x * 2, y * 2, 8, 4));
-            drawables.Add(new Drawable(torusMesh, x * 6, y * 2, 8, 4));
-            drawables.Add(new Drawable(torusMesh, x * 2, y * 5, 8, 4));
-            drawables.Add(new Drawable(torusMesh, x * 6, y * 5, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 2, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 9, 8, 4));
+
+            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 2, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 9, 8, 4));
+
+            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 2, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 9, 8, 4));
 
             return drawables;
+        }
+
+        //--------------------------------------------------------------------------------
+
+        private static Drawable CreateDrawable(Mesh mesh, int posX, int posY, int scaleX, int scaleY) {
+
+            Random rand = new Random(Guid.NewGuid().GetHashCode());
+
+            double x =   rand.NextDouble() * (rand.NextDouble() >= 0.5 ? -1.0 : 1.0);
+            double y =   rand.NextDouble() * (rand.NextDouble() >= 0.5 ? -1.0 : 1.0);
+            double z =   rand.NextDouble() * (rand.NextDouble() >= 0.5 ? -1.0 : 1.0);
+            double rot = rand.NextDouble() * (rand.NextDouble() >= 0.5 ? -1.0 : 1.0);
+
+            directions.Add(new Vector3((float)x, (float)y, (float)z));
+            rotations.Add(rot /= 10.0);
+
+            return new Drawable(new Mesh(mesh), posX, posY, scaleX, scaleY);
         }
 
         //--------------------------------------------------------------------------------
@@ -36,8 +65,8 @@ namespace ASCIIRenderer {
 
             for (int i = 0; i < drawables.Count; i++) {
 
-                Vector3 rotationAxis = new Vector3(1f, 0.5f, 0f);
-                float angle = 0.01f;
+                Vector3 rotationAxis = directions[i];
+                float angle = (float) rotations[i];
 
                 Drawable drawable = drawables[i];
 
@@ -56,10 +85,9 @@ namespace ASCIIRenderer {
             while (true) {
 
                 TransformDrawables(drawables);
-
                 renderer.Draw(drawables);
 
-                int threadSleepDuration = renderer.ThreadSleepDuration;
+                int threadSleepDuration = renderer.ThreadSleepMS;
 
                 if (threadSleepDuration != 0) {
                     Thread.Sleep(threadSleepDuration);
