@@ -17,27 +17,27 @@ namespace ASCIIRenderer {
         // Methods
         //--------------------------------------------------------------------------------
 
-        private static List<Drawable> CreateDrawables(ConsoleRenderer renderer) {
+        private static List<Drawable> CreateDrawables(FrameRenderer renderer) {
 
             List<Drawable> drawables = new List<Drawable>();
 
             Vector3[] vertices = MeshHelpers.Torus(16, 14, 2f, 1f, out int[] triangles);
             Mesh torusMesh = new Mesh(vertices, triangles);
 
-            int x = renderer.ConsoleWidth / 8;
-            int y = renderer.ConsoleHeight / 6;
+            int x = renderer.FrameWidth / 8;
+            int y = renderer.FrameHeight / 6;
 
-            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 2, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 6, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 2, y * 9, 8, 4));
-
-            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 2, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 6, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 5, y * 9, 8, 4));
-
-            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 2, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 6, 8, 4));
-            drawables.Add(CreateDrawable(torusMesh, x * 8, y * 9, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 1, y * 1, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 1, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 1, y * 10, 8, 4));
+            
+            drawables.Add(CreateDrawable(torusMesh, x * 4, y * 1, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 4, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 4, y * 10, 8, 4));
+            
+            drawables.Add(CreateDrawable(torusMesh, x * 7, y * 1, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 7, y * 6, 8, 4));
+            drawables.Add(CreateDrawable(torusMesh, x * 7, y * 10, 8, 4));
 
             return drawables;
         }
@@ -78,7 +78,7 @@ namespace ASCIIRenderer {
 
         private static void Main(string[] args) {
 
-            ConsoleRenderer renderer = new ConsoleRenderer();
+            FrameRenderer renderer = new FrameRenderer(new ConsoleFrameDefinition());
 
             List<Drawable> drawables = Program.CreateDrawables(renderer);
 

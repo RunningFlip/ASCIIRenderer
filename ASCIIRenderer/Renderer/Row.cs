@@ -68,6 +68,8 @@ namespace ASCIIRenderer {
             for (int i = 0; i < this.content.Length; i++) {
                 this.content[i] = this.emptyChar;
             }
+
+            this.HasNewContent = true;
         }
 
         //--------------------------------------------------------------------------------
