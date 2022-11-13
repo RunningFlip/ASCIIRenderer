@@ -47,7 +47,7 @@ namespace ASCIIRenderer {
         // Methods
         //--------------------------------------------------------------------------------
 
-        public char[][] MeshToPixels(Vector3 viewDirection, Vector3 boundsSize, int scaleX, int scaleY) {
+        public char[][] MeshToPixels(ref Vector3 viewDirection, Vector3 boundsSize, int scaleX, int scaleY) {
 
             char[][] pixels = new char[scaleY * (int)(boundsSize.Y + 0.75f)][];
 

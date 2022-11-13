@@ -92,8 +92,8 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        public char[][] GetPixels(Vector3 viewDirection) {
-            return this.mesh.MeshToPixels(viewDirection, this.BoundsSize, this.scaleX, this.scaleY);
+        public char[][] GetPixels(ref Vector3 viewDirection) {
+            return this.mesh.MeshToPixels(ref viewDirection, this.BoundsSize, this.scaleX, this.scaleY);
         }
 
         //--------------------------------------------------------------------------------

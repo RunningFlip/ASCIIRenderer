@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace ASCIIRenderer {
 
-
     public class ConsoleFrameDefinition : IFrameDefinition {
 
         //--------------------------------------------------------------------------------
