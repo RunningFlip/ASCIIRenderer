@@ -31,7 +31,7 @@ namespace ASCIIRenderer {
                     Console.CursorVisible = false;
 
                     if (i > 1) {
-                        Console.SetCursorPosition(0, i - 1);
+                        Console.SetCursorPosition(0, i);
                     }
 
                     Console.Write(row.Content);

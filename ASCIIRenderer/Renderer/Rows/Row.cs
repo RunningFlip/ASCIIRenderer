@@ -74,7 +74,7 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        public void SetContent(int position, string text) {
+        public void SetContent(int position, string text, bool force) {
 
             if (string.IsNullOrEmpty(text)) {
                 return;
@@ -92,7 +92,7 @@ namespace ASCIIRenderer {
 
                 char newChar = text[i];
 
-                if (newChar != this.emptyChar) {
+                if (force || newChar != this.emptyChar) {
                     this.content[i + position] = newChar;              
                 }
             }

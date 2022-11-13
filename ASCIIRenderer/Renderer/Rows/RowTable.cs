@@ -23,8 +23,8 @@ namespace ASCIIRenderer {
         // Methods
         //--------------------------------------------------------------------------------
 
-        public void SetRowContent(int index, int posX, ref string content) {
-            this.rows[index].SetContent(posX, content);
+        public void SetRowContent(int index, int posX, ref string content, bool force = false) {
+            this.rows[index].SetContent(posX, content, force);
         }
 
         //--------------------------------------------------------------------------------

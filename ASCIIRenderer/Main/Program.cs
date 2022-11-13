@@ -78,7 +78,7 @@ namespace ASCIIRenderer {
 
         private static void Main(string[] args) {
 
-            FrameRenderer renderer = new FrameRenderer(new ConsoleFrameDefinition());
+            FrameRenderer renderer = new FrameRenderer(new ConsoleFrameDefinition(), new Logger(40, 8));
 
             List<Drawable> drawables = Program.CreateDrawables(renderer);
 
