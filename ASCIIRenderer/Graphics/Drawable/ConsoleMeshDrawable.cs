@@ -43,13 +43,21 @@ namespace ASCIIRenderer.Graphics {
         // Methods
         //--------------------------------------------------------------------------------
 
-        public override char[][] GetPixels(ref Vector3 viewDirection) {
+        public override string[] GetContent(ref Vector3 viewDirection) {
 
-            return this.MeshTransform.Mesh.MeshToPixels(
+            char[][] pixels = this.MeshTransform.Mesh.MeshToPixels(
                 ref viewDirection,
-                this.MeshTransform.BoundsSize, 
-                this.MeshTransform.ScaleX, 
+                this.MeshTransform.BoundsSize,
+                this.MeshTransform.ScaleX,
                 this.MeshTransform.ScaleY);
+
+            string[] content = new string[pixels.Length];
+
+            for (int i = 0; i < pixels.Length; i++) {
+                content[i] = new string(pixels[i]);
+            }
+
+            return content;
         }
 
         //--------------------------------------------------------------------------------

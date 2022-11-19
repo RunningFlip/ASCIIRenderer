@@ -103,30 +103,25 @@ namespace ASCIIRenderer {
 
         private void DrawableToRows(R drawable) {
 
-            char[][] pixels = drawable.GetPixels(ref this.viewDirection);
+            string[] content = drawable.GetContent(ref this.viewDirection);
 
-            int sizeX = pixels[0].Length;
-            int sizeY = pixels.Length;
+            int sizeX = content[0].Length;
+            int sizeY = content.Length;
 
             int posX = drawable.PosX - sizeX / 2;
             int posY = drawable.PosY - sizeY / 2;
 
-            for (int i = 0; i < pixels.Length; i++) {
+            for (int i = 0; i < content.Length; i++) {
 
-                char[] row = pixels[i];
-                string content = "";
+                string rowContent = content[i];
 
-                for (int idx = 0; idx < row.Length; idx++) {
-                    content += row[idx];
-                }
-
-                int contentLength = content.Length;
+                int contentLength = rowContent.Length;
                 int correctedPosX = posX;
 
                 if (correctedPosX < 0) {
 
-                    content = content.Substring(Math.Abs(correctedPosX));
-                    contentLength = content.Length;
+                    rowContent = rowContent.Substring(Math.Abs(correctedPosX));
+                    contentLength = rowContent.Length;
                     correctedPosX = 0;
                 }
 
@@ -135,50 +130,16 @@ namespace ASCIIRenderer {
                     int charactersToCut = correctedPosX + contentLength - this.frameWidth;
 
                     int length = contentLength - charactersToCut;
-                    content = 0 < length && length < contentLength
-                        ? content.Substring(0, length)
+                    rowContent = 0 < length && length < contentLength
+                        ? rowContent.Substring(0, length)
                         : "";
                 }
 
                 if (0 <= posY + i && posY + i < this.frameHeight) {
-                    this.rowTable.SetRowContent(posY + i, correctedPosX, ref content, drawable);
+                    this.rowTable.SetRowContent(posY + i, correctedPosX, ref rowContent, drawable);
                 }
             }
         }
-
-        //--------------------------------------------------------------------------------
-
-        //private void LoggerToRows() {
-        //
-        //    string[] content = this.logger.GetContent();
-        //
-        //    for (int i = 0; i < content.Length; i++) {
-        //
-        //        if (i >= this.frameHeight) {
-        //            return;
-        //        }
-        //
-        //        string c = content[i];
-        //
-        //        if (string.IsNullOrEmpty(c)) {
-        //            continue;
-        //        }
-        //
-        //        int contentLength = c.Length;
-        //
-        //        if (contentLength >= this.frameWidth) {
-        //
-        //            int charactersToCut = contentLength - this.frameWidth;
-        //
-        //            int length = contentLength - charactersToCut;
-        //            c = 0 < length && length < contentLength
-        //                ? c.Substring(0, length)
-        //                : "";
-        //        }
-        //
-        //        this.rowTable.SetRowContent(i, 0, ref c, ConsoleColor.White, true);
-        //    }
-        //}
 
         //--------------------------------------------------------------------------------
     }

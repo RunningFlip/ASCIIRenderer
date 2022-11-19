@@ -44,7 +44,7 @@ namespace ASCIIRenderer.Graphics {
         // Abstract methods
         //--------------------------------------------------------------------------------
 
-        public abstract char[][] GetPixels(ref Vector3 viewDirection);
+        public abstract string[] GetContent(ref Vector3 viewDirection);
 
         //--------------------------------------------------------------------------------
     }

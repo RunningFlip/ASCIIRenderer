@@ -50,7 +50,7 @@ namespace ASCIIRenderer.Graphics {
         // Methods
         //--------------------------------------------------------------------------------
 
-        public override char[][] GetPixels(ref Vector3 viewDirection) {
+        public override string[] GetContent(ref Vector3 viewDirection) {
             return this.logger.GetContent();
         }
 
