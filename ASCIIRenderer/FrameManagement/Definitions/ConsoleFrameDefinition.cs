@@ -12,7 +12,7 @@ namespace ASCIIRenderer.Definitions {
         // Properties
         //--------------------------------------------------------------------------------
 
-        public bool UseColor { get; set } = true;
+        public bool UseColor { get; set; } = true;
 
         public int ThreadSleepMS => 0;
 
