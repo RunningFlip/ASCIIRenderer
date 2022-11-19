@@ -2,9 +2,16 @@
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.Logging {
 
     public class Logger {
+
+        //--------------------------------------------------------------------------------
+        // Properties
+        //--------------------------------------------------------------------------------
+
+        public int SizeX => this.sizeX;
+        public int SizeY => this.sizeY;
 
         //--------------------------------------------------------------------------------
         // Fields
@@ -13,7 +20,7 @@ namespace ASCIIRenderer {
         private int sizeX;
         private int sizeY;
 
-        private string[] content;
+        private char[][] content;
         private string[] logs;
 
         //--------------------------------------------------------------------------------
@@ -22,7 +29,7 @@ namespace ASCIIRenderer {
 
         public Logger(int sizeX, int sizeY) {
 
-            this.content = new string[1];
+            this.content = new char[1][];
             this.logs = new string[1];
 
             this.UpdateSize(sizeX, sizeY);
@@ -36,7 +43,7 @@ namespace ASCIIRenderer {
 
             this.sizeX = x;
             this.sizeY = y;
-            this.content = new string[this.sizeY + 1];
+            this.content = new char[this.sizeY + 1][];
 
             this.UpdateMessagesSize(this.sizeY);
         }
@@ -73,7 +80,7 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        public string[] GetContent() {
+        public char[][] GetContent() {
 
             for (int i = 0; i < this.content.Length & i < this.logs.Length; i++) {
 
@@ -83,10 +90,10 @@ namespace ASCIIRenderer {
                     ? currentMessage + new string(RendererContants.EMPTY_CHAR, this.sizeX - currentMessage.Length)
                     : this.logs[i].Substring(0, this.sizeX);
 
-                this.content[i] = currentMessage + RendererContants.EMPTY_CHAR + RendererContants.EMPTY_CHAR + "|"; 
+                this.content[i] = (currentMessage + RendererContants.EMPTY_CHAR + RendererContants.EMPTY_CHAR + "|").ToCharArray(); 
             }
 
-            this.content[this.content.Length - 1] = new string('_', this.sizeX + 1) + "/";
+            this.content[this.content.Length - 1] = (new string('_', this.sizeX + 1) + "/").ToCharArray();
 
             return this.content;
         }

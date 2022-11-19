@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ASCIIRenderer.Definitions;
+using ASCIIRenderer.FrameManagement;
+using ASCIIRenderer.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -6,7 +9,9 @@ using System.Numerics;
 
 namespace ASCIIRenderer {
 
-    public class FrameRenderer {
+    public class FrameRenderer<T, R> 
+        where T : Row<R>, new() 
+        where R : Drawable {
 
         //--------------------------------------------------------------------------------
         // Properties
@@ -26,20 +31,16 @@ namespace ASCIIRenderer {
         private int frameWidth;
         private int frameHeight;
 
-        private Logger logger;
-        private RowTable rowTable;
-
-        private IFrameDefinition frameDefinition;
+        private RowTable<T, R> rowTable;
+        private IFrameDefinition<T, R> frameDefinition;
 
         //--------------------------------------------------------------------------------
         // Constructor
         //--------------------------------------------------------------------------------
 
-        public FrameRenderer(IFrameDefinition frameDefinition, Logger logger) {
+        public FrameRenderer(IFrameDefinition<T, R> frameDefinition) {
 
-            this.logger = logger;
-            this.rowTable = new RowTable();
-
+            this.rowTable = new RowTable<T, R>();
             this.frameDefinition = frameDefinition;
 
             this.UpdateFrameSize();
@@ -49,12 +50,14 @@ namespace ASCIIRenderer {
         // Methods
         //--------------------------------------------------------------------------------
 
-        public void Draw(List<Drawable> drawables) {
+        public void Draw(List<R> drawables) {
+
+            this.rowTable.ClearRows();
 
             this.UpdateFrameSize();
             this.UpdateContent(drawables);
 
-            this.frameDefinition.DrawRows(this.rowTable.Rows);
+            this.frameDefinition.DrawRows(this.rowTable);
         }
 
         //--------------------------------------------------------------------------------
@@ -89,26 +92,24 @@ namespace ASCIIRenderer {
 
         //--------------------------------------------------------------------------------
 
-        private void UpdateContent(List<Drawable> drawables) {
+        private void UpdateContent(List<R> drawables) {
 
             for (int i = 0; i < drawables.Count; i++) {
                 this.DrawableToRows(drawables[i]);
             }
-
-            this.LoggerToRows();
         }
 
         //--------------------------------------------------------------------------------
 
-        private void DrawableToRows(Drawable drawables) {
+        private void DrawableToRows(R drawable) {
 
-            char[][] pixels = drawables.GetPixels(ref this.viewDirection);
+            char[][] pixels = drawable.GetPixels(ref this.viewDirection);
 
             int sizeX = pixels[0].Length;
             int sizeY = pixels.Length;
 
-            int posX = drawables.PosX - sizeX / 2;
-            int posY = drawables.PosY - sizeY / 2;
+            int posX = drawable.PosX - sizeX / 2;
+            int posY = drawable.PosY - sizeY / 2;
 
             for (int i = 0; i < pixels.Length; i++) {
 
@@ -139,43 +140,45 @@ namespace ASCIIRenderer {
                         : "";
                 }
 
-                if (posY + i >= 0 && posY + i < this.frameHeight) {
-                    this.rowTable.SetRowContent(posY + i, correctedPosX, ref content);
+                if (0 <= posY + i && posY + i < this.frameHeight) {
+                    this.rowTable.SetRowContent(posY + i, correctedPosX, ref content, drawable);
                 }
             }
         }
 
         //--------------------------------------------------------------------------------
 
-        private void LoggerToRows() {
-
-            string[] content = this.logger.GetContent();
-
-            for (int i = 0; i < content.Length; i++) {
-
-                string c = content[i];
-
-                if (string.IsNullOrEmpty(c)) {
-                    continue;
-                }
-
-                int contentLength = c.Length;
-
-                if (contentLength >= this.frameWidth) {
-
-                    int charactersToCut = contentLength - this.frameWidth;
-
-                    int length = contentLength - charactersToCut;
-                    c = 0 < length && length < contentLength
-                        ? c.Substring(0, length)
-                        : "";
-                }
-
-                if (i >= 0 && i < this.frameHeight) {
-                    this.rowTable.SetRowContent(i, 0, ref c, true);
-                }
-            }
-        }
+        //private void LoggerToRows() {
+        //
+        //    string[] content = this.logger.GetContent();
+        //
+        //    for (int i = 0; i < content.Length; i++) {
+        //
+        //        if (i >= this.frameHeight) {
+        //            return;
+        //        }
+        //
+        //        string c = content[i];
+        //
+        //        if (string.IsNullOrEmpty(c)) {
+        //            continue;
+        //        }
+        //
+        //        int contentLength = c.Length;
+        //
+        //        if (contentLength >= this.frameWidth) {
+        //
+        //            int charactersToCut = contentLength - this.frameWidth;
+        //
+        //            int length = contentLength - charactersToCut;
+        //            c = 0 < length && length < contentLength
+        //                ? c.Substring(0, length)
+        //                : "";
+        //        }
+        //
+        //        this.rowTable.SetRowContent(i, 0, ref c, ConsoleColor.White, true);
+        //    }
+        //}
 
         //--------------------------------------------------------------------------------
     }

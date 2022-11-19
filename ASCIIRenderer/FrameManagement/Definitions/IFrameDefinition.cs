@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using ASCIIRenderer.FrameManagement;
+using ASCIIRenderer.Graphics;
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.Definitions {
 
-    public interface IFrameDefinition {
+    public interface IFrameDefinition<T, R> 
+        where T : Row<R>, new() 
+        where R : Drawable {
 
         int ThreadSleepMS { get; }
 
@@ -14,6 +17,6 @@ namespace ASCIIRenderer {
         void OnHeightChanged(int height);
         void OnWidthChanged(int width);
 
-        void DrawRows(List<Row> row);
+        void DrawRows(RowTable<T, R> rowTable);
     }
 }

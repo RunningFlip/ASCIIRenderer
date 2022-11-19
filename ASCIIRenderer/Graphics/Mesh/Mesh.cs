@@ -3,7 +3,7 @@ using System.Numerics;
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.Graphics {
 
     public class Mesh {
 
@@ -26,8 +26,8 @@ namespace ASCIIRenderer {
                 throw new Exception("Triangles array not dividable by three.");
             }
 
-            this.vertices = (Vector3[])toCopy.vertices.Clone();
-            this.triangles = (int[])toCopy.triangles.Clone();
+            this.vertices = toCopy.vertices.Clone() as Vector3[];
+            this.triangles = toCopy.triangles.Clone() as int[];
         }
 
 

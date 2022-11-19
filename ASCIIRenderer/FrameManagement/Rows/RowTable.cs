@@ -1,30 +1,35 @@
-﻿using System;
+﻿using ASCIIRenderer.Graphics;
+using System;
 using System.Collections.Generic;
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.FrameManagement {
 
-    public class RowTable {
+    public class RowTable<T, R> 
+        where T : Row<R>, new() 
+        where R : Drawable {
 
         //--------------------------------------------------------------------------------
         // Properties
         //--------------------------------------------------------------------------------
 
-        public List<Row> Rows => this.rows;
+        public int Count => this.rows.Count;
+
+        public T this[int index] => this.rows[index];
 
         //--------------------------------------------------------------------------------
         // Fields
         //--------------------------------------------------------------------------------
 
-        private List<Row> rows = new List<Row>();
+        private List<T> rows = new List<T>();
 
         //--------------------------------------------------------------------------------
         // Methods
         //--------------------------------------------------------------------------------
 
-        public void SetRowContent(int index, int posX, ref string content, bool force = false) {
-            this.rows[index].SetContent(posX, content, force);
+        public void SetRowContent(int index, int posX, ref string content, R drawable) {
+            this.rows[index].SetContent(posX, content, drawable);
         }
 
         //--------------------------------------------------------------------------------
@@ -45,7 +50,11 @@ namespace ASCIIRenderer {
             if (currentCount < count) {
 
                 for (int i = 0; i < count - currentCount; i++) {
-                    this.rows.Add(new Row(length, RendererContants.EMPTY_CHAR));
+
+                    T row = new T();
+                    row.SetMaxLength(length);
+
+                    this.rows.Add(row);
                 }
             }
             else {

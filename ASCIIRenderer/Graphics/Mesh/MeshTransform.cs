@@ -2,9 +2,9 @@
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.Graphics {
 
-    public class Drawable {
+    public class MeshTransform {
 
         //--------------------------------------------------------------------------------
         // Properties
@@ -15,17 +15,18 @@ namespace ASCIIRenderer {
         public Vector3 BoundingBoxMax => this.boundingMax;
         public Vector3 BoundsSize => Vector3.Abs(this.boundingMax - this.boundingMin);
 
-        // Rotation
-        private Quaternion Rotation => this.rotation;
-
-        // Position
-        public int PosX => this.posX;
-        public int PosY => this.posY;
+        // Scale
+        public int PosX { get; set; }
+        public int PosY { get; set; }
 
         // Scale
-        public int ScaleX => this.scaleX;
-        public int ScaleY => this.scaleY;
+        public int ScaleX { get; set; }
+        public int ScaleY { get; set; }
 
+        // Rotation
+        //public Quaternion Rotation => this.rotation;
+
+        // Mesh
         public Mesh Mesh => this.mesh;
 
         //--------------------------------------------------------------------------------
@@ -41,33 +42,26 @@ namespace ASCIIRenderer {
         // Rotation
         private Quaternion rotation;
 
-        // Position
-        private int posX;
-        private int posY;
-
-        // Scale
-        private int scaleX;
-        private int scaleY;
-
+        // Mesh
         private Mesh mesh;
 
         //--------------------------------------------------------------------------------
-        // Constructor
+        // Constructors
         //--------------------------------------------------------------------------------
 
-        public Drawable(Drawable toCopy) {
-            this.Init(toCopy.mesh, toCopy.rotation, toCopy.posX, toCopy.posY, toCopy.scaleX, toCopy.scaleY);
+        public MeshTransform(MeshTransform toCopy) { 
+            this.Init(toCopy.mesh, toCopy.rotation, toCopy.PosX, toCopy.PosY, toCopy.ScaleX, toCopy.ScaleY);
         }
 
         //--------------------------------------------------------------------------------
 
-        public Drawable(Mesh mesh, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) {
+        public MeshTransform(Mesh mesh, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) {
             this.Init(mesh, Quaternion.Identity, posX, posY, scaleX, scaleY);
         }
 
         //--------------------------------------------------------------------------------
 
-        public Drawable(Mesh mesh, Quaternion rotation, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) {
+        public MeshTransform(Mesh mesh, Quaternion rotation, int posX = 0, int posY = 0, int scaleX = 1, int scaleY = 1) { 
             this.Init(mesh, rotation, posX, posY, scaleX, scaleY);
         }
 
@@ -78,22 +72,15 @@ namespace ASCIIRenderer {
         private void Init(Mesh mesh, Quaternion rotation, int posX, int posY, int scaleX, int scaleY) {
 
             this.mesh = mesh;
-
             this.rotation = rotation;
 
-            this.posX = posX;
-            this.posY = posY;
+            this.PosX = posX;
+            this.PosY = posY;
 
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
+            this.ScaleX = scaleX;
+            this.ScaleY = scaleY;
 
             this.SetupBoundingBox();
-        }
-
-        //--------------------------------------------------------------------------------
-
-        public char[][] GetPixels(ref Vector3 viewDirection) {
-            return this.mesh.MeshToPixels(ref viewDirection, this.BoundsSize, this.scaleX, this.scaleY);
         }
 
         //--------------------------------------------------------------------------------

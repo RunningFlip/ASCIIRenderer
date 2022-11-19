@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ASCIIRenderer.Graphics;
+using System;
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.FrameManagement {
 
-    public class Row {
+    public abstract class Row<T> where T : Drawable {
 
         //--------------------------------------------------------------------------------
         // Properties
@@ -25,20 +26,23 @@ namespace ASCIIRenderer {
         // Fields
         //--------------------------------------------------------------------------------
 
-        private readonly char emptyChar;
-
         private int maxLength;
-        private char[] content;
 
+        private char[] content;
+        
         //--------------------------------------------------------------------------------
         // Constructor
         //--------------------------------------------------------------------------------
 
-        public Row(int length, char emptyChar) {
+        public Row() { }
 
-            this.emptyChar = emptyChar;
-            this.SetMaxLength(length);
-        }
+        //--------------------------------------------------------------------------------
+        // Abstract methods
+        //--------------------------------------------------------------------------------
+
+        protected abstract void OnResize(int length);
+        protected abstract void OnClear();
+        protected abstract void OnCharacterChanged(int position, T drawable);
 
         //--------------------------------------------------------------------------------
         // Methods
@@ -49,11 +53,12 @@ namespace ASCIIRenderer {
             if (this.maxLength != length) {
 
                 Array.Resize(ref this.content, length);
-
+                this.OnResize(length);
+                
                 if (this.maxLength > length) {
 
                     for (int i = this.maxLength - 1; i < length; i++) {
-                        this.content[i] = this.emptyChar;
+                        this.content[i] = RendererContants.EMPTY_CHAR;
                     }
                 }
 
@@ -66,15 +71,17 @@ namespace ASCIIRenderer {
         public void Clear() {
 
             for (int i = 0; i < this.content.Length; i++) {
-                this.content[i] = this.emptyChar;
+                this.content[i] = RendererContants.EMPTY_CHAR;
             }
+
+            this.OnClear();
 
             this.HasNewContent = true;
         }
 
         //--------------------------------------------------------------------------------
 
-        public void SetContent(int position, string text, bool force) {
+        public void SetContent(int position, string text, T drawable) {
 
             if (string.IsNullOrEmpty(text)) {
                 return;
@@ -92,8 +99,10 @@ namespace ASCIIRenderer {
 
                 char newChar = text[i];
 
-                if (force || newChar != this.emptyChar) {
-                    this.content[i + position] = newChar;              
+                if (drawable.ForceOverride || newChar != RendererContants.EMPTY_CHAR) {
+
+                    this.content[i + position] = newChar;
+                    this.OnCharacterChanged(i + position, drawable);
                 }
             }
 

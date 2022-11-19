@@ -4,7 +4,7 @@ using System.Numerics;
 
 //--------------------------------------------------------------------------------
 
-namespace ASCIIRenderer {
+namespace ASCIIRenderer.Graphics {
 
     public static class MeshHelpers {
 
