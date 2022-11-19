@@ -22,7 +22,7 @@ namespace ASCIIRenderer.Graphics {
 
         //--------------------------------------------------------------------------------
 
-        public ConsoleDrawable(ConsoleColor consoleColor, int posX = 0, int posY = 0)
+        public ConsoleDrawable(ConsoleColor consoleColor, int posX, int posY)
             : base(posX, posY) {
 
             this.Color = consoleColor;

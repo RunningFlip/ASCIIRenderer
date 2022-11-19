@@ -34,7 +34,7 @@ namespace ASCIIRenderer.Graphics {
 
         //--------------------------------------------------------------------------------
 
-        public Drawable(int posX = 0, int posY = 0) {
+        public Drawable(int posX, int posY) {
 
             this.posX = posX;
             this.posY = posY;
