@@ -14,6 +14,9 @@ namespace ASCIIRenderer {
 
     public class Program {
 
+        //--------------------------------------------------------------------------------
+        // Fields
+        //--------------------------------------------------------------------------------
 
         private static List<Vector3> directions = new List<Vector3>();
         private static List<double> rotations = new List<double>();
@@ -29,7 +32,7 @@ namespace ASCIIRenderer {
             Vector3[] vertices = MeshHelpers.Torus(16, 14, 2f, 1f, out int[] triangles);
             Mesh torusMesh = new Mesh(vertices, triangles);
 
-            int x = renderer.FrameWidth / 8;
+            int x = renderer.FrameWidth  / 8;
             int y = renderer.FrameHeight / 6;
 
             drawables.Add(CreateDrawable(torusMesh, ConsoleColor.Red,       x * 1, y * 1, 8, 4));
