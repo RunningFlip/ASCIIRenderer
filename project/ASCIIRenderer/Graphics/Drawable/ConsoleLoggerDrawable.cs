@@ -20,7 +20,7 @@ namespace ASCIIRenderer.Graphics {
         // Fields
         //--------------------------------------------------------------------------------
 
-        private Logger logger;
+        private readonly Logger logger;
 
         //--------------------------------------------------------------------------------
         // Constructors
@@ -53,7 +53,5 @@ namespace ASCIIRenderer.Graphics {
         public override string[] GetContent(ref Vector3 viewDirection) {
             return this.logger.GetContent();
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

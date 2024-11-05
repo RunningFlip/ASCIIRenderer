@@ -96,7 +96,5 @@ namespace ASCIIRenderer.Definitions {
                 Console.SetCursorPosition(0, 0);
             }
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

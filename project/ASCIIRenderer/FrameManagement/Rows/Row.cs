@@ -49,21 +49,20 @@ namespace ASCIIRenderer.FrameManagement {
         //--------------------------------------------------------------------------------
 
         public void SetMaxLength(int length) {
+            
+            if (this.maxLength == length) return;
 
-            if (this.maxLength != length) {
-
-                Array.Resize(ref this.content, length);
-                this.OnResize(length);
+            Array.Resize(ref this.content, length);
+            this.OnResize(length);
                 
-                if (this.maxLength > length) {
+            if (this.maxLength > length) {
 
-                    for (int i = this.maxLength - 1; i < length; i++) {
-                        this.content[i] = RendererContants.EMPTY_CHAR;
-                    }
+                for (int i = this.maxLength - 1; i < length; i++) {
+                    this.content[i] = RendererContants.EMPTY_CHAR;
                 }
-
-                this.maxLength = length;
             }
+
+            this.maxLength = length;
         }
 
         //--------------------------------------------------------------------------------
@@ -108,7 +107,5 @@ namespace ASCIIRenderer.FrameManagement {
 
             this.HasNewContent = true;
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

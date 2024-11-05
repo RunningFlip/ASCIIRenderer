@@ -97,7 +97,5 @@ namespace ASCIIRenderer.Logging {
 
             return this.content;
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

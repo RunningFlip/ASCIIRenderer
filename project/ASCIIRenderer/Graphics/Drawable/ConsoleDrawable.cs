@@ -27,7 +27,5 @@ namespace ASCIIRenderer.Graphics {
 
             this.Color = consoleColor;
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

@@ -42,7 +42,5 @@ namespace ASCIIRenderer.FrameManagement {
         protected override void OnCharacterChanged(int position, ConsoleDrawable drawable) {
             this.contentColors[position] = drawable.Color;
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

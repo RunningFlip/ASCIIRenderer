@@ -30,7 +30,6 @@ namespace ASCIIRenderer.Graphics {
             this.triangles = toCopy.triangles.Clone() as int[];
         }
 
-
         //--------------------------------------------------------------------------------
 
         public Mesh(Vector3[] vertices, int[] triangles) {
@@ -126,7 +125,5 @@ namespace ASCIIRenderer.Graphics {
         private float Sign(ref Vector3 p1, ref Vector3 p2, ref Vector3 p3) {
             return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

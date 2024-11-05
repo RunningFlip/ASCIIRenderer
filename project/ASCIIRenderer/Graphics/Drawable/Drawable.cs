@@ -45,7 +45,5 @@ namespace ASCIIRenderer.Graphics {
         //--------------------------------------------------------------------------------
 
         public abstract string[] GetContent(ref Vector3 viewDirection);
-
-        //--------------------------------------------------------------------------------
     }
 }

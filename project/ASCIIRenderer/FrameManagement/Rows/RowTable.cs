@@ -70,7 +70,5 @@ namespace ASCIIRenderer.FrameManagement {
                 this.rows[i].SetMaxLength(length);
             }
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

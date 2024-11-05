@@ -151,7 +151,5 @@ namespace ASCIIRenderer.Graphics {
                 this.boundingMin.Z = vec.Z;
             }
         }
-
-        //--------------------------------------------------------------------------------
     }
 }

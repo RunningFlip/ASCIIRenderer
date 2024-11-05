@@ -127,7 +127,5 @@ namespace ASCIIRenderer.Graphics {
         private static double ToRadians(double angle) {
             return (Math.PI / 180.0) * angle;
         }
-
-        //--------------------------------------------------------------------------------
     }
 }
